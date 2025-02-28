@@ -40,7 +40,7 @@
                             <div class="col-md-4 col-4"><label>Area Kerja</label></div>
                             <div class="col-md-8 col-8">: {{ $data->area->gedung->nama_gedung.' - '.$data->area->nama_area }}</div>
 
-                            <div class="col-md-4 col-4"><label>Kriteria Penilaian : </label></div>
+                            <div class="col-md-4 col-12"><label>Kriteria Penilaian : </label></div>
                             <div class="col-md-12 col-12 small">
                                 @foreach ($data->temuan as $row)
                                 <div class="d-flex ml-2 mt-1">

@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-md-12 form-group">
                 <div class="card card-primary">
-                    <div class="card-header border border-dark">
+                    <div class="card-header">
                         <label class="card-title">
                             Daftar Penilaian
                         </label>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <div class="card-body border border-dark">
+                        <div class="card-body">
                             <table id="table-data" class="table table-bordered text-xs text-center">
                                 <thead class="text-uppercase text-center">
                                     <tr>

@@ -401,7 +401,9 @@
                             allowOutsideClick: false,
                             didOpen: () => {
                                 Swal.showLoading();
-                            }
+                            },
+                            icon: 'success',
+                            confirmButtonText: 'Selesai'
                         });
 
                         form.submit();
@@ -433,7 +435,7 @@
                         title: 'Proses...',
                         text: 'Mohon menunggu.',
                         icon: 'info',
-                        allowOutsideClick: false,
+                        allowOutsideClick: true,
                         didOpen: () => {
                             Swal.showLoading();
                         }

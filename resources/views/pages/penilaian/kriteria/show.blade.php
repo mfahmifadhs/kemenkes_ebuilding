@@ -23,13 +23,13 @@
         <div class="row">
             <div class="col-md-12 form-group">
                 <div class="card card-primary">
-                    <div class="card-header border border-dark">
+                    <div class="card-header">
                         <label class="card-title">
                             Daftar Kriteria
                         </label>
                     </div>
                     <div class="table-responsive">
-                        <div class="card-body border border-dark">
+                        <div class="card-body">
                             <table id="table" class="table table-bordered text-xs text-center">
                                 <thead class="text-uppercase">
                                     <tr>

@@ -121,7 +121,7 @@ class PenilaianController extends Controller
 
             if ($row->status == 'true') {
                 $status .= '<i class="fas fa-check-circle text-success"></i>';
-            } else {
+            } else if($row->status == 'false') {
                 $status .= '<i class="fas fa-times-circle text-danger"></i>';
             }
 
@@ -139,7 +139,7 @@ class PenilaianController extends Controller
                 'penempatan'    => $row->penempatan?->nama_penempatan,
                 'temuan'        => $row->temuan->count(),
                 'keterangan'    => $row->keterangan ?? null,
-                'status'        => $row->status == 'true' ? 'Diterima' : 'Ditolak, ' . $row->keterangan_tolak,
+                'status'        => $row->status == 'true' ? 'Diterima' : ($row->status == 'false' ? 'Ditolak ' . $row->keterangan_tolak : 'Pending'),
                 'statusIcon'    => $status,
                 'detailTemuan'  => $row->temuan->where('status', 'true')->map(function ($item) {
                     return optional($item->kriteria)->nama_kriteria;

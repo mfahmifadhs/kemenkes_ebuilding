@@ -63,7 +63,7 @@
                             <label class="w-25 col-4">keterangan</label>
                             <label class="w-75 col-8" style="font-weight: 400;">: {{ $data->keterangan }}</label>
 
-                            <label class="w-25 col-12">Kriteria Penilaian</label>
+                            <label class="w-25 mt-3 col-12">Kriteria Penilaian</label>
                             <div class="w-75 col-12">
                                 @foreach ($data->temuan as $row)
                                 <div class="d-flex ml-2 mt-1">
@@ -104,8 +104,8 @@
                             @endif
 
                             @if ($data->status == 'false')
-                            <label class="w-25 mt-3">Alasan Penolakan</label>
-                            <div class="w-75 mt-3">:
+                            <label class="w-25 mt-3 col-12">Alasan Penolakan :</label>
+                            <div class="w-75 col-12">
                                 {{ $data->keterangan_tolak }}
                             </div>
                             @endif

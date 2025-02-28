@@ -16,15 +16,40 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
 use Str;
+use ZipArchive;
 
 class PegawaiController extends Controller
 {
     public function show(Request $request)
     {
+        $role       = Auth::user()->role_id;
+        $user       = Auth::user()->pegawai;
         $data       = Pegawai::count();
         $penyedia   = Penyedia::get();
         $penempatan = Penempatan::get();
-        $posisi     = Posisi::get();
+        $posisiArr  = Posisi::orderBy('nama_posisi', 'asc');
+
+        if ($role == 4) {
+            if ($user->penyedia) {
+                if ($user->penyedia_id == 1 && $user->posisi_id == 10) {
+                    $posisiArr = $posisiArr->where('id_posisi', 3);
+                }
+
+                if ($user->penyedia_id == 1 && $user->posisi_id == 11) {
+                    $posisiArr = $posisiArr->where('id_posisi', 5);
+                }
+
+                if ($user->penyedia_id == 2) {
+                    $posisiArr = $posisiArr->whereNotIn('id_posisi', [3, 5, 10, 11]);
+                }
+            } else {
+                $posisiArr = $posisiArr->where('penyedia_id', $user->penyedia_id);
+            }
+        } else {
+            $posisiArr = $posisiArr;
+        }
+
+        $posisi = $posisiArr->get();
 
         $penyediaSelected   = $request->penyedia;
         $penempatanSelected = $request->penempatan;
@@ -122,9 +147,9 @@ class PegawaiController extends Controller
 
             if ($search) {
                 $res = $data->with('posisi')->where('nama_pegawai', 'like', '%' . $search . '%')
-                ->orWhereHas('posisi', function ($q) use ($search) {
-                    $q->where('nama_posisi', 'like', '%' . $search . '%');
-                });
+                    ->orWhereHas('posisi', function ($q) use ($search) {
+                        $q->where('nama_posisi', 'like', '%' . $search . '%');
+                    });
             }
 
             $result = $res->get();
@@ -292,10 +317,10 @@ class PegawaiController extends Controller
             'created_at'     => Carbon::now()
         ]);
 
-        return redirect()->route('pegawai')->with('success', 'Berhasil Memperbaharui');
+        return redirect()->route('pegawai.detail', $id)->with('success', 'Berhasil Memperbaharui');
     }
 
-    public function qrcode()
+    public function qrcode($id)
     {
         $user = Auth::user()->pegawai;
 
@@ -310,12 +335,28 @@ class PegawaiController extends Controller
                 $petugas = $dataPetugas->whereNotIn('posisi_id', [3, 5]);
             }
 
-            $petugas = $petugas->get();
+            if ($id == '*') {
+                $petugas = $petugas->get();
+            } else {
+                $petugas = $petugas->where('id_pegawai', $id)->get();
+            }
 
-            foreach ($petugas as $row) {
+            $tempDirectory = storage_path('app/temp');
+            if (!file_exists($tempDirectory)) {
+                mkdir($tempDirectory, 0755, true);
+            }
+
+            // Buat file ZIP
+            $zipFileName = "qrcode_pegawai.zip";
+            $zipFilePath = "{$tempDirectory}/{$zipFileName}";
+
+
+            $zip = new ZipArchive;
+            if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
+                foreach ($petugas as $row) {
                 // Generate QR Code
                 $token = Str::random(16);
-                $link = "http://127.0.0.1:8000/pegawai/review/{$row->id_pegawai}/{$token}";
+                $link = 'https://e-building.site/pegawai/review/' . $row->id_pegawai . '/' . $token;
                 $renderer = new ImageRenderer(new RendererStyle(450), new ImagickImageBackEnd());
                 $writer = new Writer($renderer);
                 $qrImage = imagecreatefromstring($writer->writeString($link));
@@ -369,7 +410,7 @@ class PegawaiController extends Controller
 
                 // Tambahkan Nama & Jabatan Pegawai
                 $textColor = imagecolorallocate($templateImage, 255, 255, 255);
-                $fontPath = public_path('dist/fonts/GOTHICB0.ttf');
+                $fontPath = public_path('dist/fonts/GOTHICB0.TTF');
                 $fontSize = 32;
                 $name = strtoupper($row->nama_pegawai);
                 $jobTitle = strtoupper($row->posisi->nama_posisi);
@@ -390,22 +431,26 @@ class PegawaiController extends Controller
                 imagettftext($templateImage, $fontSize, 0, $jobTitleX + 100, $jobTitleY, $jobColor, $fontPath, $jobTitle);
 
                 // Simpan Hasil Gambar
-                $homeDirectory = getenv("USERPROFILE") ?: getenv("HOME");
-                $directoryPath = "{$homeDirectory}/Downloads/QRCODE-PEGAWAI";
-                if (!file_exists($directoryPath)) mkdir($directoryPath, 0777, true);
+                $fileName = "qr_pegawai_{$row->id_pegawai}_{$row->nama_pegawai}.png";
+                $filePath = "{$tempDirectory}/{$fileName}";
 
-                $outputPath = "{$directoryPath}/qr_pegawai_{$row->id_pegawai}_{$row->nama_pegawai}.png";
-                imagepng($templateImage, $outputPath);
+                // Simpan gambar ke file sementara
+                imagepng($templateImage, $filePath);
 
-                // Hapus Resource Gambar untuk Optimasi Memori
+                // Tambahkan file ke ZIP
+                $zip->addFile($filePath, $fileName);
+
+                // Hapus resource gambar
                 imagedestroy($templateImage);
-                imagedestroy($qrImage);
-                imagedestroy($resizedImage);
-                imagedestroy($originalImage);
             }
+
+                $zip->close();
+            }
+            return response()->download($zipFilePath)->deleteFileAfterSend(true);
 
 
             return back()->with('success', 'Berhasil Download');
         }
+            return back()->with('success', 'Gagal');
     }
 }

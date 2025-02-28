@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('pegawai', [PegawaiController::class, 'show'])->name('pegawai');
         Route::get('pegawai/select', [PegawaiController::class, 'select'])->name('pegawai.select');
-        Route::get('pegawai/qrcode', [PegawaiController::class, 'qrcode'])->name('pegawai.qrcode');
+        Route::get('pegawai/qrcode/{id}', [PegawaiController::class, 'qrcode'])->name('pegawai.qrcode');
         Route::get('pegawai/detail/{id}', [PegawaiController::class, 'detail'])->name('pegawai.detail');
         Route::get('pegawai/edit/{id}', [PegawaiController::class, 'edit'])->name('pegawai.edit');
         Route::get('pegawai/delete/{id}', [PegawaiController::class, 'delete'])->name('pegawai.delete');

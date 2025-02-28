@@ -25,7 +25,7 @@
 
         .title {
             color: gold;
-            font-size: 38px;
+            font-size: 32px;
             font-weight: 1000;
             text-transform: uppercase;
             letter-spacing: 15px;
@@ -58,7 +58,7 @@
         }
 
         .stars label {
-            font-size: 50px;
+            font-size: 40px;
             color: white;
             cursor: pointer;
             transition: color 0.3s ease-in-out;
