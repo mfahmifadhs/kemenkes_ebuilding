@@ -40,6 +40,23 @@
                             <div class="col-md-4 col-4"><label>Area Kerja</label></div>
                             <div class="col-md-8 col-8">: {{ $data->area->gedung->nama_gedung.' - '.$data->area->nama_area }}</div>
 
+                            <div class="col-md-4 col-4"><label>Keterangan</label></div>
+                            <div class="col-md-8 col-8">:</div>
+                            <div class="col-md-12 col-12">{{ $data->keterangan }}</div>
+
+                            <div class="col-md-4 col-4"><label>Skala Penilaian</label></div>
+                            <div class="col-md-8 col-8">:</div>
+                            <div class="col-md-12 col-12">
+                                <div class="stars-label">
+                                    <label><i class="fas fa-star {{ $data->nilai > 4 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                    <label><i class="fas fa-star {{ $data->nilai > 3 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                    <label><i class="fas fa-star {{ $data->nilai > 2 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                    <label><i class="fas fa-star {{ $data->nilai > 1 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                    <label><i class="fas fa-star {{ $data->nilai > 0 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                </div>
+                            </div>
+
+                            @if ($data->temuan->count())
                             <div class="col-md-4 col-12"><label>Kriteria Penilaian : </label></div>
                             <div class="col-md-12 col-12 small">
                                 @foreach ($data->temuan as $row)
@@ -53,7 +70,9 @@
                                 </div>
                                 @endforeach
                             </div>
+                            @endif
 
+                            @if ($data->foto->count())
                             <div class="col-md-4"><label>Foto Temuan : </label></div>
                             <div class="col-md-12">
                                 <div class="d-flex ml-2 mt-1">
@@ -64,6 +83,7 @@
                                     @endforeach
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                     <div class="card-footer text-right">

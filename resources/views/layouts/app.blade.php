@@ -446,6 +446,21 @@
             });
         }
     </script>
+
+    <script>
+        const stars = document.querySelectorAll('.stars input');
+        const feedback = document.getElementById('feedback');
+
+        stars.forEach(star => {
+            star.addEventListener('change', function() {
+                if (this.value <= 3) {
+                    feedback.classList.add('show');
+                } else {
+                    feedback.classList.remove('show');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

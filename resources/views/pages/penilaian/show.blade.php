@@ -40,7 +40,7 @@
                                 <thead class="text-uppercase text-center">
                                     <tr>
                                         <th style="width: 0%;">No</th>
-                                        <th style="width: 8%;">Aksi</th>
+                                        <th style="width: 0%;">Aksi</th>
                                         <th style="width: 0%;">Foto</th>
                                         <th style="width: 0%;">Tanggal</th>
                                         <th style="width: 0%;">Kode</th>
@@ -51,7 +51,8 @@
                                         <th style="width: 0%;">Temuan</th>
                                         <th>Pengawas</th>
                                         <th>Keterangan</th>
-                                        <th>Status</th>
+                                        <th>Nilai</th>
+                                        <th style="width: 0%;">Status</th>
                                         <th class="d-none">Detail</th>
                                     </tr>
                                 </thead>
@@ -296,6 +297,7 @@
                                     <td class="align-middle">${item.temuan} temuan</td>
                                     <td class="align-middle text-left">${item.pengawas}</td>
                                     <td class="align-middle text-left">${item.keterangan}</td>
+                                    <td class="align-middle">${item.nilai}</td>
                                     <td class="align-middle text-left">${item.status}</td>
                                     <td class="align-middle text-left d-none">${item.detailTemuan}</td>
                                 </tr>

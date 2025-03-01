@@ -87,28 +87,45 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="pegawai">Kriteria Penilaian</label>
-                                @foreach ($kriteria as $row)
-                                <div class="form-group d-flex">
-                                    <span class="w-0">
-                                        <input id="kriteria-{{ $row->id_kriteria }}" type="checkbox" name="temuan[]" value="{{ $row->id_kriteria }}" style="transform: scale(1.2);">
-                                    </span>
-                                    <span class="w-100 ml-2">
-                                        <label for="kriteria-{{ $row->id_kriteria }}" style="font-weight: 400;">{{ $row->nama_kriteria }}</label>
-                                    </span>
+                                <label for="skala">Skala Penilaian</label>
+                                <div class="stars">
+                                    <input type="radio" id="star5" name="rating" value="5">
+                                    <label for="star5"><i class="fas fa-star"></i></label>
+                                    <input type="radio" id="star4" name="rating" value="4">
+                                    <label for="star4"><i class="fas fa-star"></i></label>
+                                    <input type="radio" id="star3" name="rating" value="3">
+                                    <label for="star3"><i class="fas fa-star"></i></label>
+                                    <input type="radio" id="star2" name="rating" value="2">
+                                    <label for="star2"><i class="fas fa-star"></i></label>
+                                    <input type="radio" id="star1" name="rating" value="1">
+                                    <label for="star1"><i class="fas fa-star"></i></label>
                                 </div>
-                                @endforeach
-                            </div>
 
-                            <div class="form-group">
-                                <label for="keterangan">keterangan</label>
-                                <textarea name="keterangan" class="form-control" id="keterangan"></textarea>
-                            </div>
+                                <div class="form-group">
+                                    <textarea id="keterangan" name="keterangan" class="form-control mt-1" placeholder="Keterangan" rows="4"></textarea>
+                                </div>
 
-                            <div class="form-group">
-                                <label for="pegawai">Foto Temuan</label> <br>
-                                <input type="file" name="foto[]" class="previewImg" data-preview="multiple-foto" accept="image/*" multiple> <br>
-                                <div id="multiple-foto" class="mt-3 d-flex flex-wrap gap-2"></div>
+                                <div id="feedback">
+                                    <div class="form-group">
+                                        <label for="pegawai">Kriteria Penilaian</label>
+                                        @foreach ($kriteria as $row)
+                                        <div class="form-group d-flex">
+                                            <span class="w-0">
+                                                <input id="kriteria-{{ $row->id_kriteria }}" type="checkbox" name="temuan[]" value="{{ $row->id_kriteria }}" style="transform: scale(1.2);">
+                                            </span>
+                                            <span class="w-100 ml-2">
+                                                <label for="kriteria-{{ $row->id_kriteria }}" style="font-weight: 400;">{{ $row->nama_kriteria }}</label>
+                                            </span>
+                                        </div>
+                                        @endforeach
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="pegawai">Foto Temuan</label> <br>
+                                        <input type="file" name="foto[]" class="previewImg" data-preview="multiple-foto" accept="image/*" multiple> <br>
+                                        <div id="multiple-foto" class="mt-3 d-flex flex-wrap gap-2"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer">

@@ -55420,3 +55420,53 @@ a.text-muted:hover {
     text-align: left;
     /* Perataan teks */
 }
+
+.stars {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    margin: 10px 0;
+    letter-spacing: 20px;
+}
+
+.stars input {
+    display: none;
+}
+
+.stars label {
+    font-size: 40px;
+    color: grey;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.stars-label {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    margin: 10px 0;
+    letter-spacing: 20px;
+    font-size: 40px;
+    color: grey;
+    cursor: default;
+    transition: color 0.3s ease-in-out;
+}
+
+.stars input:checked~label,
+.stars label:hover,
+.stars label:hover~label {
+    color: gold;
+}
+
+#feedback {
+    width: 100%;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#feedback.show {
+    opacity: 1;
+    transform: translateY(0);
+}

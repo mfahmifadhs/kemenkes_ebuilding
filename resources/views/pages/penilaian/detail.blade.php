@@ -28,11 +28,13 @@
                         <label class="card-title">
                             Penilaian
                         </label>
+                        @if (!$data->status)
                         <div class="card-tools">
                             <a href="{{ route('penilaian.edit', $data->id_penilaian) }}" class="btn btn-warning btn-xs text-dark">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
                         </div>
+                        @endif
                     </div>
                     <div class="card-body" style="overflow-y: auto; height: 65vh;">
                         <div class="d-flex flex-wrap gap-2">
@@ -60,9 +62,22 @@
                             <label class="w-25 col-4">Area Kerja</label>
                             <label class="w-75 col-8" style="font-weight: 400;">: {{ $data->area->nama_area }}</label>
 
-                            <label class="w-25 col-4">keterangan</label>
+                            <label class="w-25 col-4">Keterangan</label>
                             <label class="w-75 col-8" style="font-weight: 400;">: {{ $data->keterangan }}</label>
 
+                            <label class="w-25 col-4">Skala Penilaian</label>
+                            <label class="w-75 col-8" style="font-weight: 400;">:</label>
+                            <div class="w-100 col-12">
+                                <div class="stars-label">
+                                    <label><i class="fas fa-star {{ $data->nilai > 4 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                    <label><i class="fas fa-star {{ $data->nilai > 3 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                    <label><i class="fas fa-star {{ $data->nilai > 2 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                    <label><i class="fas fa-star {{ $data->nilai > 1 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                    <label><i class="fas fa-star {{ $data->nilai > 0 ? 'text-warning' : 'text-secondary' }}"></i></label>
+                                </div>
+                            </div>
+
+                            @if ($data->temuan->count())
                             <label class="w-25 mt-3 col-12">Kriteria Penilaian</label>
                             <div class="w-75 col-12">
                                 @foreach ($data->temuan as $row)
@@ -76,7 +91,9 @@
                                 </div>
                                 @endforeach
                             </div>
+                            @endif
 
+                            @if ($data->foto->count())
                             <label class="w-25 col-form-label col-12">Foto Temuan</label>
                             <div class="w-75">
                                 <div class="mt-2 d-flex flex-wrap gap-2 col-12">
@@ -89,6 +106,7 @@
                                     @endforeach
                                 </div>
                             </div>
+                            @endif
 
                             @if ($data->foto_ttd)
                             <label class="w-25 mt-3 col-form-label col-12">Foto Tandatangan</label>

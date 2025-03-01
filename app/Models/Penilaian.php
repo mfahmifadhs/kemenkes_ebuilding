@@ -24,6 +24,7 @@ class Penilaian extends Model
         'penempatan_id',
         'posisi_id',
         'area_id',
+        'nilai',
         'keterangan'
     ];
 

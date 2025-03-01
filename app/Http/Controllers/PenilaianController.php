@@ -95,33 +95,33 @@ class PenilaianController extends Controller
                 $foto = '<img src="https://cdn-icons-png.flaticon.com/128/149/149071.png" class="img-fluid" alt="">';
             }
 
-            $aksi .= '
-                <a href="' . route('penilaian.detail', $row->id_penilaian) . '" class="btn btn-default btn-xs bg-primary rounded border-dark">
-                    <i class="fas fa-info-circle p-1" style="font-size: 12px;"></i>
-                </a>
-            ';
-
-            if ($row->status == 'true') {
-                if ($role != 3) {
-                    $aksi .= '
-                        <a href="' . route('penilaian.edit', $row->id_penilaian) . '" class="btn btn-default btn-xs bg-warning rounded border-dark">
-                            <i class="fas fa-edit p-1" style="font-size: 12px;"></i>
-                        </a>
-                    ';
-                }
-            } else if (!$row->status) {
+            if (!$row->status) {
                 $aksi .= '
-                    <a href="' . route('penilaian.approval', $row->id_penilaian) . '" class="btn btn-default btn-xs bg-warning rounded border-dark">
+                    <a href="' . route('penilaian.approval', $row->id_penilaian) . '" class="btn btn-default btn-xs bg-warning rounded border-dark my-1">
                         <i class="fas fa-file-signature p-1" style="font-size: 12px;"></i>
                     </a>
                 ';
 
+                if ($role != 3) {
+                    $aksi .= '
+                        <a href="' . route('penilaian.edit', $row->id_penilaian) . '" class="btn btn-default btn-xs bg-warning rounded border-dark my-1">
+                            <i class="fas fa-edit p-1" style="font-size: 12px;"></i>
+                        </a>
+                    ';
+                }
+
                 $status .= '<i class="fas fa-clock text-warning"></i>';
+            } else if ($row->status) {
+                $aksi .= '
+                    <a href="' . route('penilaian.detail', $row->id_penilaian) . '" class="btn btn-default btn-xs bg-primary rounded border-dark">
+                        <i class="fas fa-info-circle p-1" style="font-size: 12px;"></i>
+                    </a>
+                ';
             }
 
             if ($row->status == 'true') {
                 $status .= '<i class="fas fa-check-circle text-success"></i>';
-            } else if($row->status == 'false') {
+            } else if ($row->status == 'false') {
                 $status .= '<i class="fas fa-times-circle text-danger"></i>';
             }
 
@@ -138,6 +138,7 @@ class PenilaianController extends Controller
                 'petugas'       => $row->petugas?->nama_pegawai,
                 'penempatan'    => $row->penempatan?->nama_penempatan,
                 'temuan'        => $row->temuan->count(),
+                'nilai'         => '<i class="fas fa-star text-warning"></i>'.$row->nilai,
                 'keterangan'    => $row->keterangan ?? null,
                 'status'        => $row->status == 'true' ? 'Diterima' : ($row->status == 'false' ? 'Ditolak ' . $row->keterangan_tolak : 'Pending'),
                 'statusIcon'    => $status,
@@ -173,6 +174,8 @@ class PenilaianController extends Controller
             if ($user->penyedia_id == 2) {
                 $posisi = $posisiArr->whereNotIn('id_posisi', [3, 5])->get();
             }
+        } else {
+            $posisi = $posisiArr->get();
         }
 
         if ($request->proses == 'proses') {
@@ -201,36 +204,41 @@ class PenilaianController extends Controller
         $tambah->posisi_id      = $pegawai->posisi_id;
         $tambah->kode_penilaian = time();
         $tambah->area_id        = $request->area;
+        $tambah->nilai          = $request->rating;
         $tambah->keterangan     = $request->keterangan;
         $tambah->created_at     = Carbon::now();
         $tambah->save();
 
-        $temuan = $request->temuan;
-        foreach ($temuan as $kriteria_id) {
-            $id_detail = PenilaianDetail::withTrashed()->count() + 1;
-            $detail = new PenilaianDetail();
-            $detail->id_detail      = $id_detail;
-            $detail->penilaian_id   = $id_penilaian;
-            $detail->kriteria_id    = $kriteria_id;
-            $detail->created_at     = Carbon::now();
-            $detail->save();
+        if ($request->temuan) {
+            $temuan = $request->temuan;
+            foreach ($temuan as $kriteria_id) {
+                $id_detail = PenilaianDetail::withTrashed()->count() + 1;
+                $detail = new PenilaianDetail();
+                $detail->id_detail      = $id_detail;
+                $detail->penilaian_id   = $id_penilaian;
+                $detail->kriteria_id    = $kriteria_id;
+                $detail->created_at     = Carbon::now();
+                $detail->save();
+            }
         }
 
-        $foto = $request->file('foto');
-        foreach ($foto as $i => $foto_temuan) {
+        if ($request->file('foto')) {
+            $foto = $request->file('foto');
+            foreach ($foto as $i => $foto_temuan) {
 
-            if ($foto_temuan) {
-                $fileName = time() . '_' . $foto_temuan->getClientOriginalName();
-                $request->foto[$i]->move(public_path('dist/img/foto_temuan'), $fileName);
+                if ($foto_temuan) {
+                    $fileName = time() . '_' . $foto_temuan->getClientOriginalName();
+                    $request->foto[$i]->move(public_path('dist/img/foto_temuan'), $fileName);
+                }
+
+                $id_foto = PenilaianFoto::withTrashed()->count() + 1;
+                $fotoTemuan = new PenilaianFoto();
+                $fotoTemuan->id_foto        = $id_foto;
+                $fotoTemuan->penilaian_id   = $id_penilaian;
+                $fotoTemuan->foto_temuan    = $fileName;
+                $fotoTemuan->created_at     = Carbon::now();
+                $fotoTemuan->save();
             }
-
-            $id_foto = PenilaianFoto::withTrashed()->count() + 1;
-            $fotoTemuan = new PenilaianFoto();
-            $fotoTemuan->id_foto        = $id_foto;
-            $fotoTemuan->penilaian_id   = $id_penilaian;
-            $fotoTemuan->foto_temuan    = $fileName;
-            $fotoTemuan->created_at     = Carbon::now();
-            $fotoTemuan->save();
         }
 
         return redirect()->route('penilaian.approval', $id_penilaian)->with('success', 'Berhasil Menambahkan');
