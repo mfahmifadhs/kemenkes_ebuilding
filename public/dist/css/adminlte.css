@@ -55470,3 +55470,11 @@ a.text-muted:hover {
     opacity: 1;
     transform: translateY(0);
 }
+
+.stars input[type="checkbox"] {
+    display: none;
+}
+
+.stars input[type="checkbox"]:checked ~ label {
+    color: #ffcc00; /* Warna bintang terpilih */
+}

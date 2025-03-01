@@ -286,6 +286,7 @@ class PenilaianController extends Controller
             'posisi_id'      => $pegawai->posisi_id,
             'kode_penilaian' => time(),
             'area_id'        => $request->area,
+            'nilai'          => $request->rating,
             'keterangan'     => $request->keterangan,
             'created_at'     => Carbon::now(),
         ]);
