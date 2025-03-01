@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GedungArea;
 use Intervention\Image\ImageManagerStatic as Image;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
@@ -190,7 +191,7 @@ class PegawaiController extends Controller
                 'fileFoto'      => $row->foto_pegawai,
                 'penyedia'      => $row->penyedia?->nama_penyedia,
                 'posisi'        => $row->posisi?->nama_posisi,
-                'penempatan'    => $row->penempatan?->nama_penempatan,
+                'penempatan'    => $row->area ? $row->area?->gedung->nama_gedung.' - '.$row->area?->nama_area.', '.$row->penempatan?->nama_penempatan : $row->penempatan?->nama_penempatan,
                 'pegawai'       => $row->nama_pegawai,
                 'nik'           => $row->nik,
                 'nip'           => $row->nip,
@@ -260,12 +261,19 @@ class PegawaiController extends Controller
         $penyedia   = Penyedia::get();
         $penempatan = Penempatan::get();
         $posisi     = Posisi::get();
+        $areaArr    = GedungArea::orderBy('id_area', 'asc');
 
         if ($role == 4) {
             if ($data->penyedia_id == $user->penyedia_id) {
                 $data = $data;
             } else {
                 return redirect()->route('pegawai');
+            }
+
+            if ($data->posisi_id == 5) {
+                $area = $areaArr->where('posisi_id', 5)->get();
+            } else {
+                $area = $areaArr->where('posisi_id', 0)->get();
             }
         }
 
@@ -288,7 +296,7 @@ class PegawaiController extends Controller
         }
 
 
-        return view('pages.pegawai.edit', compact('data', 'penyedia', 'penempatan', 'posisi'));
+        return view('pages.pegawai.edit', compact('data', 'penyedia', 'penempatan', 'posisi', 'area'));
     }
 
     public function update(Request $request, $id)
@@ -302,6 +310,7 @@ class PegawaiController extends Controller
         Pegawai::where('id_pegawai', $id)->update([
             'uker_id'        => $request->uker,
             'penempatan_id'  => $request->penempatan,
+            'area_id'        => $request->area,
             'penyedia_id'    => $request->penyedia,
             'posisi_id'      => $request->posisi,
             'nama_pegawai'   => $request->pegawai,

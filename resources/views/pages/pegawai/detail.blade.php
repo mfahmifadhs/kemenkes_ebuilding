@@ -86,7 +86,7 @@
                             </div>
                             <div class="col-md-12 col-12">
                                 <label class="mb-0">Area Kerja</label>
-                                <p>{{ $data->area?->area_kerja }}</p>
+                                <p>{{ $data->area?->gedung->nama_gedung }} - {{ $data->area?->nama_area }}</p>
                             </div>
                         </div>
                     </div>

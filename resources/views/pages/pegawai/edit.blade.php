@@ -101,6 +101,19 @@
                                         <label for="tanggal_masuk" class="col-form-label">Tanggal Masuk:</label>
                                         <input type="date" class="form-control" id="tanggal_masuk" name="tanggal_masuk" value="{{ $data->tanggal_masuk }}">
                                     </div>
+                                    <div class="col-md-12 mb-2">
+                                        <label for="area" class="col-form-label">Area Kerja:</label>
+                                        <select name="area" id="area" class="form-control w-100" required>
+                                            @if (!$data->area_id)
+                                            <option value="">-- Pilih Area Kerja</option>
+                                            @endif
+                                            @foreach($area as $row)
+                                            <option value="{{ $row->id_area }}" <?= $row->id_area == $data->area_id ? 'selected' : ''; ?>>
+                                                {{ $row->gedung->nama_gedung.' - '.$row->nama_area }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <div class="col-md-6 mb-2">
                                         <label class="col-form-label">Foto Pegawai:</label> <br>
                                         @if (!$data->foto_pegawai)
@@ -140,6 +153,7 @@
 
 @section('js')
 <script>
+    $("#area").select2()
     $("#table").DataTable({
         "responsive": false,
         "lengthChange": true,
