@@ -12,7 +12,7 @@
                 </h4>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <a href="{{ route('penilaian.create') }}" class="btn btn-primary btn-block border-dark p-3 form-group">
                     <span class="font-weight-bold">
                         <i class="fas fa-plus-circle"></i> Mulai Penilaian
@@ -23,8 +23,8 @@
                     <span class="info-box-icon"><i class="fas fa-file"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Kartu Kuning</span>
                         <span class="info-box-number">{{ $totalTemuan->count() }}</span>
+                        <span class="info-box-text text-xs"><b>Total Seluruh Penilaian</b></span>
                     </div>
                 </div>
 
@@ -32,8 +32,8 @@
                     <span class="info-box-icon"><i class="fas fa-file text-success"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Kartu Kuning Diterima</span>
                         <span class="info-box-number">{{ $totalTemuan->where('status', 'true')->count() }}</span>
+                        <span class="info-box-text text-xs"><b>Total Penilaian Diterima</b></span>
                     </div>
                 </div>
 
@@ -41,87 +41,228 @@
                     <span class="info-box-icon"><i class="fas fa-file text-danger"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Kartu Kuning Ditolak</span>
                         <span class="info-box-number">{{ $totalTemuan->where('status', 'false')->count() }}</span>
+                        <span class="info-box-text text-xs"><b>Total Penilaian Ditolak</b></span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div class="row">
-                    @if (Auth::user()->role_id != 4 || (Auth::user()->role_id == 4 && Auth::user()->pegawai->posisi_id == 11))
-                    <div class="col-md-4">
-                        <div class="info-box border border-dark">
-                            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-user"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Security</span>
-                                <span class="info-box-number">
-                                    {{ $posisi->where('posisi_id', 5)->count() ?? 0 }}
-                                    <small>pegawai</small>
-                                </span>
+                    <div class="col-md-12">
+                        <div class="row">
+                            @if (Auth::user()->role_id != 4 || (Auth::user()->role_id == 4 && Auth::user()->pegawai->posisi_id == 11))
+                            <div class="col-md-4">
+                                <div class="info-box border border-dark">
+                                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-user"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Total Security</span>
+                                        <span class="info-box-number">
+                                            {{ $posisi->where('posisi_id', 5)->count() ?? 0 }}
+                                            <small>pegawai</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            @if (Auth::user()->role_id != 4 || (Auth::user()->role_id == 4 && Auth::user()->pegawai->posisi_id == 10))
+                            <div class="col-md-4">
+                                <div class="info-box border border-dark">
+                                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-user"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Total Cleaning Service</span>
+                                        <span class="info-box-number">
+                                            {{ $posisi->where('posisi_id', 3)->count() ?? 0 }}
+                                            <small>pegawai</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            <div class="col-md-4">
+                                <!-- Lainnya -->
                             </div>
                         </div>
-                    </div>
-                    @endif
-                    @if (Auth::user()->role_id != 4 || (Auth::user()->role_id == 4 && Auth::user()->pegawai->posisi_id == 10))
-                    <div class="col-md-4">
-                        <div class="info-box border border-dark">
-                            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-user"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Cleaning Service</span>
-                                <span class="info-box-number">
-                                    {{ $posisi->where('posisi_id', 3)->count() ?? 0 }}
-                                    <small>pegawai</small>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                    <div class="col-md-4">
-                        <!-- Lainnya -->
                     </div>
 
-                    <div class="col-md-12">
-                        <div class="card border border-dark table-responsive">
-                            <div class="card-body">
-                                <label class="text-sm">Review Petugas</label>
-                                <table id="table-data" class="table table-striped text-xs text-center">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Tanggal</th>
-                                            <th>Petugas</th>
-                                            <th>Posisi</th>
-                                            <th>Area Kerja</th>
-                                            <th>Nilai</th>
-                                            <th>Keterangan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($review as $row)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $row->created_at }}</td>
-                                            <td class="text-left">{{ $row->petugas->nama_pegawai }}</td>
-                                            <td class="text-left">{{ $row->petugas->posisi->nama_posisi }}</td>
-                                            <td class="text-left">
-                                                {{ $row->area?->gedung->nama_gedung }} {{ $row->area?->nama_area }}
-                                            </td>
-                                            <td>{{ $row->nilai }}</td>
-                                            <td>{{ $row->keterangan }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                    <div class="col-md-4">
+                        <div class="card border border-dark">
+                            <div class="card-header">
+                                <label class="small m-0">
+                                    <i class="fas fa-ranking-star"></i> Leaderboard Review
+                                </label>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
                             </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0" style="overflow-y: auto; height: 30vh;">
+                                <ul class="products-list product-list-in-card pl-2 pr-2">
+                                    @foreach ($totalReview as $row)
+                                    <li class="item">
+                                        <div class="product-img mx-2">
+                                            <span class="badge badge-warning">{{ $loop->iteration }}</span>
+                                            @if ($row->petugas->foto_pegawai)
+                                            <img src="{{ asset('dist/img/foto_pegawai/'. $row->petugas->foto_pegawai) }}" alt="Product Image" class="img-size-50">
+                                            @else
+                                            <img src="https://cdn-icons-png.flaticon.com/128/3177/3177465.png" alt="Product Image" class="img-size-50">
+                                            @endif
+                                        </div>
+                                        <div class="product-info text-sm">
+                                            <a href="{{ route('pegawai.detail', $row->petugas_id) }}" class="product-title">{{ $row->petugas->nama_pegawai }}
+                                                <h4 class="text-primary float-right font-weight-bold">
+                                                    {{ $row->total }}
+                                                </h4>
+                                            </a>
+                                            <span class="product-description">
+                                                {{ $row->petugas->posisi->nama_posisi }}
+                                            </span>
+                                        </div>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer text-center">
+                                <a href="javascript:void(0)" class="uppercase">View All Products</a>
+                            </div>
+                            <!-- /.card-footer -->
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card border border-dark">
+                            <div class="card-header">
+                                <label class="small m-0">
+                                    <i class="fas fa-ranking-star"></i> Leaderboard Reviewer
+                                </label>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0" style="overflow-y: auto; height: 30vh;">
+                                <ul class="products-list product-list-in-card pl-2 pr-2">
+                                    @foreach ($totalReviewer as $row)
+                                    <li class="item">
+                                        <div class="product-img mx-2">
+                                            <span class="badge badge-warning">{{ $loop->iteration }}</span>
+                                            <img src="https://cdn-icons-png.flaticon.com/128/3177/3177465.png" alt="Product Image" class="img-size-50">
+                                        </div>
+                                        <div class="product-info text-sm">
+                                            <a href="#" class="product-title">{{ $row->no_telepon }}
+                                                <h4 class="text-primary float-right font-weight-bold">
+                                                    {{ $row->total }}
+                                                </h4>
+                                            </a>
+                                            <span class="product-description">
+                                                Reviewer
+                                            </span>
+                                        </div>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer text-center">
+                                <a href="javascript:void(0)" class="uppercase">View All Products</a>
+                            </div>
+                            <!-- /.card-footer -->
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card border border-dark">
+                            <div class="card-header">
+                                <label class="small m-0">
+                                    <i class="fas fa-ranking-star"></i> Leaderboard Penilaian
+                                </label>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body p-0" style="overflow-y: auto; height: 30vh;">
+                                <ul class="products-list product-list-in-card pl-2 pr-2">
+                                    @foreach ($totalPenilaian as $row)
+                                    <li class="item">
+                                        <div class="product-img mx-2">
+                                            <span class="badge badge-warning">{{ $loop->iteration }}</span>
+                                            @if ($row->petugas->foto_pegawai)
+                                            <img src="{{ asset('dist/img/foto_pegawai/'. $row->petugas->foto_pegawai) }}" alt="Product Image" class="img-size-50">
+                                            @else
+                                            <img src="https://cdn-icons-png.flaticon.com/128/3177/3177465.png" alt="Product Image" class="img-size-50">
+                                            @endif
+                                        </div>
+                                        <div class="product-info text-sm">
+                                            <a href="{{ route('pegawai.detail', $row->petugas_id) }}" class="product-title">{{ $row->petugas->nama_pegawai }}
+                                                <h4 class="text-primary float-right font-weight-bold">
+                                                    {{ $row->total }}
+                                                </h4>
+                                            </a>
+                                            <span class="product-description">
+                                                {{ $row->petugas->posisi->nama_posisi }}
+                                            </span>
+                                        </div>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer text-center">
+                                <a href="{{ route('penilaian') }}" class="uppercase">Seluruh Penilaian</a>
+                            </div>
+                            <!-- /.card-footer -->
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3"></div>
-            <div class="col-md-9">
-                <!-- Lainnya -->
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+
+                <div class="card border border-dark table-responsive">
+                    <div class="card-body">
+                        <label class="text-sm">Review Petugas</label>
+                        <table id="table-data" class="table table-striped text-xs text-center">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Petugas</th>
+                                    <th>Posisi</th>
+                                    <th>Area Kerja</th>
+                                    <th>Nilai</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($review as $row)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $row->created_at }}</td>
+                                    <td class="text-left">{{ $row->petugas->nama_pegawai }}</td>
+                                    <td class="text-left">{{ $row->petugas->posisi->nama_posisi }}</td>
+                                    <td class="text-left">
+                                        {{ $row->area?->gedung->nama_gedung }} {{ $row->area?->nama_area }}
+                                    </td>
+                                    <td>{{ $row->nilai }}</td>
+                                    <td>{{ $row->keterangan }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
