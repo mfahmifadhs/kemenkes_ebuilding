@@ -226,6 +226,44 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+
+                <div class="card border border-dark table-responsive">
+                    <div class="card-body">
+                        <label class="text-sm">Review Petugas</label>
+                        <table id="table-data" class="table table-striped text-xs text-center">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Petugas</th>
+                                    <th>Posisi</th>
+                                    <th>Area Kerja</th>
+                                    <th>Nilai</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($review as $row)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $row->created_at }}</td>
+                                    <td class="text-left">{{ $row->petugas->nama_pegawai }}</td>
+                                    <td class="text-left">{{ $row->petugas->posisi->nama_posisi }}</td>
+                                    <td class="text-left">
+                                        {{ $row->area?->gedung->nama_gedung }} {{ $row->area?->nama_area }}
+                                    </td>
+                                    <td>{{ $row->nilai }}</td>
+                                    <td>{{ $row->keterangan }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

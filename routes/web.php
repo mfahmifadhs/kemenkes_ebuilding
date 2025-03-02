@@ -31,6 +31,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('temuan', [TemuanController::class, 'show'])->name('temuan');
     Route::get('temuan/select', [TemuanController::class, 'select'])->name('temuan.select');
 
+    Route::get('review', [ReviewController::class, 'show'])->name('review');
+    Route::get('review/select', [ReviewController::class, 'select'])->name('review.select');
+    Route::get('review/detail/{id}', [ReviewController::class, 'detail'])->name('review.detail');
+
     Route::get('penilaian', [PenilaianController::class, 'show'])->name('penilaian');
     Route::get('penilaian/select', [PenilaianController::class, 'select'])->name('penilaian.select');
     Route::get('penilaian/detail/{id}', [PenilaianController::class, 'detail'])->name('penilaian.detail');

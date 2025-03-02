@@ -123,6 +123,13 @@
                             </a>
                         </li>
                         @endif
+
+                        <li class="nav-item">
+                            <a href="{{ route('review') }}" class="nav-link font-weight-bold">
+                                <i class="nav-icon fas fa-star"></i>
+                                <p>Review</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link font-weight-bold">
                                 <i class="nav-icon fas fa-line-chart"></i>
