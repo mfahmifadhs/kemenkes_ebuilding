@@ -22,12 +22,31 @@ class PenilaianController extends Controller
         $data       = Penilaian::count();
         $penyedia   = Penyedia::get();
         $penempatan = Penempatan::get();
-        $posisi     = Posisi::get();
+        $user       = Auth::user()->pegawai;
+        $posisiArr  = Posisi::orderBy('nama_posisi', 'asc');
 
         $penyediaSelected   = $request->penyedia;
         $penempatanSelected = $request->penempatan;
         $posisiSelected     = $request->posisi;
         $statusSelected     = $request->status;
+
+        $posisiArr  = Posisi::orderBy('nama_posisi', 'asc');
+
+        if ($user->penyedia) {
+            if ($user->penyedia_id == 1 && $user->posisi_id == 10) {
+                $posisi = $posisiArr->whereIn('id_posisi', [3, 6])->get();
+            }
+
+            if ($user->penyedia_id == 1 && $user->posisi_id == 11) {
+                $posisi = $posisiArr->where('id_posisi', 5)->get();
+            }
+
+            if ($user->penyedia_id == 2) {
+                $posisi = $posisiArr->whereNotIn('id_posisi', [3, 5])->get();
+            }
+        } else {
+            $posisi = $posisiArr->get();
+        }
 
         return view('pages.penilaian.show', compact('data', 'penyedia', 'penempatan', 'posisi', 'penyediaSelected', 'penempatanSelected', 'posisiSelected', 'statusSelected'));
     }
@@ -164,7 +183,7 @@ class PenilaianController extends Controller
 
         if ($user->penyedia) {
             if ($user->penyedia_id == 1 && $user->posisi_id == 10) {
-                $posisi = $posisiArr->where('id_posisi', 3)->get();
+                $posisi = $posisiArr->whereIn('id_posisi', [3, 6])->get();
             }
 
             if ($user->penyedia_id == 1 && $user->posisi_id == 11) {
@@ -180,10 +199,9 @@ class PenilaianController extends Controller
 
         if ($request->proses == 'proses') {
             $proses     = $request->proses;
-            $posisiArea = $request->posisi == 5 ? 5 : 0;
             $posisi     = Posisi::where('id_posisi', $request->posisi)->get();
             $pegawai    = Pegawai::where('posisi_id', $request->posisi)->get();
-            $area       = GedungArea::where('posisi_id', $posisiArea)->get();
+            $area       = GedungArea::where('posisi_id', $request->posisi)->get();
             $kriteria   = PenilaianKriteria::where('posisi_id', $request->posisi)->get();
             $posisiSelected = $request->posisi;
         }

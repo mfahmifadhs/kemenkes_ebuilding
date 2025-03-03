@@ -23,17 +23,17 @@ class PegawaiController extends Controller
 {
     public function show(Request $request)
     {
-        $role       = Auth::user()->role_id;
-        $user       = Auth::user()->pegawai;
-        $data       = Pegawai::count();
-        $penyedia   = Penyedia::get();
-        $penempatan = Penempatan::get();
-        $posisiArr  = Posisi::orderBy('nama_posisi', 'asc');
+        $role        = Auth::user()->role_id;
+        $user        = Auth::user()->pegawai;
+        $data        = Pegawai::count();
+        $penyediaArr = Penyedia::orderBy('nama_penyedia', 'asc');
+        $penempatan  = Penempatan::get();
+        $posisiArr   = Posisi::orderBy('nama_posisi', 'asc');
 
         if ($role == 4) {
             if ($user->penyedia) {
                 if ($user->penyedia_id == 1 && $user->posisi_id == 10) {
-                    $posisiArr = $posisiArr->where('id_posisi', 3);
+                    $posisi = $posisiArr->whereIn('id_posisi', [3, 6])->get();
                 }
 
                 if ($user->penyedia_id == 1 && $user->posisi_id == 11) {
@@ -43,14 +43,18 @@ class PegawaiController extends Controller
                 if ($user->penyedia_id == 2) {
                     $posisiArr = $posisiArr->whereNotIn('id_posisi', [3, 5, 10, 11]);
                 }
+
+                $penyediaArr = $penyediaArr->where('id_penyedia', $user->penyedia_id);
             } else {
                 $posisiArr = $posisiArr->where('penyedia_id', $user->penyedia_id);
             }
         } else {
-            $posisiArr = $posisiArr;
+            $posisiArr   = $posisiArr;
+            $penyediaArr = $penyediaArr;
         }
 
-        $posisi = $posisiArr->get();
+        $posisi   = $posisiArr->get();
+        $penyedia = $penyediaArr->get();
 
         $penyediaSelected   = $request->penyedia;
         $penempatanSelected = $request->penempatan;
@@ -112,7 +116,7 @@ class PegawaiController extends Controller
         if ($role == 4) {
             if ($user->penyedia) {
                 if ($user->penyedia_id == 1 && $user->posisi_id == 10) {
-                    $data = $dataArr->where('posisi_id', 3);
+                    $data = $dataArr->whereIn('posisi_id', [3, 6]);
                 }
 
                 if ($user->penyedia_id == 1 && $user->posisi_id == 11) {
@@ -261,19 +265,13 @@ class PegawaiController extends Controller
         $penyedia   = Penyedia::get();
         $penempatan = Penempatan::get();
         $posisi     = Posisi::get();
-        $areaArr    = GedungArea::orderBy('id_area', 'asc');
+        $area       = GedungArea::where('posisi_id', $data->posisi_id)->orderBy('id_area', 'asc')->get();
 
         if ($role == 4) {
             if ($data->penyedia_id == $user->penyedia_id) {
                 $data = $data;
             } else {
                 return redirect()->route('pegawai');
-            }
-
-            if ($data->posisi_id == 5) {
-                $area = $areaArr->where('posisi_id', 5)->get();
-            } else {
-                $area = $areaArr->where('posisi_id', 0)->get();
             }
         }
 
@@ -337,7 +335,7 @@ class PegawaiController extends Controller
             $dataPetugas = Pegawai::where('penyedia_id', $user->penyedia_id);
 
             if ($user->penyedia_id == 1 && $user->posisi_id == 10) {
-                $petugas = $dataPetugas->where('posisi_id', 3);
+                $petugas = $dataPetugas->whereIn('posisi_id', [3, 6]);
             } else if ($user->penyedia_id == 1 && $user->posisi_id == 11) {
                 $petugas = $dataPetugas->where('posisi_id', 5);
             } else if ($user->penyedia_id == 2) {

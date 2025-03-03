@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="col-md-6 mb-2">
                                         <label for="tanggal_masuk" class="col-form-label">Tanggal Masuk:</label>
-                                        <input type="date" class="form-control" id="tanggal_masuk" name="tanggal_masuk" value="{{ $data->tanggal_masuk }}">
+                                        <input type="date" class="form-control" id="tanggal_masuk" name="tanggal_masuk" value="{{ Carbon\Carbon::parse($data->tanggal_masuk)->format('Y-m-d') }}">
                                     </div>
                                     <div class="col-md-12 mb-2">
                                         <label for="area" class="col-form-label">Area Kerja:</label>

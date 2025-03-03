@@ -219,7 +219,7 @@
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="tanggal_masuk" class="col-form-label">Tanggal Masuk:</label>
-                            <input type="date" class="form-control number" id="tanggal_masuk" name="tanggal_masuk">
+                            <input type="date" class="form-control number" id="tanggal_masuk" name="tanggal_masuk" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
                         </div>
                         <div class="col-md-6 mb-2">
                             <label class="col-form-label">Foto Pegawai:</label> <br>
