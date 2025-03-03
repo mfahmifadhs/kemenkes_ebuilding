@@ -13,6 +13,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user           = Auth::user()->pegawai;
+        $pengawas       = Pegawai::where('posisi_id', 10)->get();
         $totalReview    = $this->totalReview();
         $totalReviewer  = $this->totalReviewer();
         $totalPenilaian = $this->totalPenilaian();
@@ -21,7 +22,7 @@ class DashboardController extends Controller
         $penilaian = new Penilaian();
         $totalTemuan = $penilaian->total();
 
-        return view('pages.index', compact('posisi', 'totalTemuan', 'totalReview', 'totalReviewer', 'totalPenilaian'));
+        return view('pages.index', compact('pengawas','posisi', 'totalTemuan', 'totalReview', 'totalReviewer', 'totalPenilaian'));
     }
 
     public function totalReview()

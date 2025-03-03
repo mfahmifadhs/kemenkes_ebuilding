@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Pegawai extends Model
 {
@@ -30,23 +31,36 @@ class Pegawai extends Model
         'foto_pegawai'
     ];
 
-    public function uker() {
+    public function uker()
+    {
         return $this->belongsTo(UnitKerja::class, 'uker_id');
     }
 
-    public function penyedia() {
+    public function penyedia()
+    {
         return $this->belongsTo(Penyedia::class, 'penyedia_id');
     }
 
-    public function posisi() {
+    public function posisi()
+    {
         return $this->belongsTo(Posisi::class, 'posisi_id');
     }
 
-    public function penempatan() {
+    public function penempatan()
+    {
         return $this->belongsTo(Penempatan::class, 'penempatan_id');
     }
 
-    public function area() {
+    public function area()
+    {
         return $this->belongsTo(GedungArea::class, 'area_id');
+    }
+
+    public function penilaianHarian()
+    {
+        return $this->hasMany(Penilaian::class, 'pengawas_id')
+            ->select('petugas_id', \DB::raw('COUNT(*) as total_penilaian'))
+            ->whereDate('created_at', Carbon::today())
+            ->groupBy('petugas_id');
     }
 }
