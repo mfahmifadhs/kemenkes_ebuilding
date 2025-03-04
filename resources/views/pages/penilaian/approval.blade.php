@@ -56,10 +56,10 @@
                                 </div>
                             </div>
 
-                            @if ($data->temuan->count())
+                            @if ($data->temuan->whereNotIn('status', 'false')->count())
                             <div class="col-md-4 col-12"><label>Kriteria Penilaian : </label></div>
                             <div class="col-md-12 col-12 small">
-                                @foreach ($data->temuan as $row)
+                                @foreach ($data->temuan->whereNotIn('status', 'false') as $row)
                                 <div class="d-flex ml-2 mt-1">
                                     <span class="w-0">
                                         <i class="fa-solid fa-check-square text-success"></i>

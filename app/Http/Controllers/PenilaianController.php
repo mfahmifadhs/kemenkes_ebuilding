@@ -156,7 +156,7 @@ class PenilaianController extends Controller
                 'pengawas'      => $row->pengawas?->nama_pegawai,
                 'petugas'       => $row->petugas?->nama_pegawai,
                 'penempatan'    => $row->penempatan?->nama_penempatan,
-                'temuan'        => $row->temuan->count(),
+                'temuan'        => $row->temuan->whereNotIn('status', 'false')->count(),
                 'nilai'         => '<i class="fas fa-star text-warning"></i>'.$row->nilai,
                 'keterangan'    => $row->keterangan ?? null,
                 'status'        => $row->status == 'true' ? 'Diterima' : ($row->status == 'false' ? 'Ditolak ' . $row->keterangan_tolak : 'Pending'),

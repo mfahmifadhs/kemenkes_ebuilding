@@ -45,7 +45,7 @@
                                 @if (!$data->status) <span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span> @endif
                                 @if ($data->status == 'true')
                                 <span class="badge badge-success"><i class="fas fa-check-circle"></i> Setuju</span>
-                                @else
+                                @elseif ($data->status == 'false')
                                 <span class="badge badge-danger"><i class="fas fa-times-circle"></i> Tolak</span>
                                 @endif
                             </label>
@@ -77,10 +77,10 @@
                                 </div>
                             </div>
 
-                            @if ($data->temuan->count())
+                            @if ($data->temuan->whereNotIn('status', 'false')->count())
                             <label class="w-25 mt-3 col-12">Kriteria Penilaian</label>
                             <div class="w-75 col-12">
-                                @foreach ($data->temuan as $row)
+                                @foreach ($data->temuan->whereNotIn('status', 'false') as $row)
                                 <div class="d-flex ml-2 mt-1">
                                     <span class="w-0">
                                         <i class="fa-solid fa-check-square text-success"></i>
