@@ -286,8 +286,7 @@ class PenilaianController extends Controller
         }
 
         $kriteria   = PenilaianKriteria::where('posisi_id', $data->posisi_id)->get();
-        $posisiArea = $data->posisi_id == 5 ? 5 : 0;
-        $area     = GedungArea::where('posisi_id', $posisiArea)->get();
+        $area     = GedungArea::where('posisi_id', $data->petugas->posisi_id)->get();
 
         return view('pages.penilaian.edit', compact('kriteria', 'data', 'area'));
     }

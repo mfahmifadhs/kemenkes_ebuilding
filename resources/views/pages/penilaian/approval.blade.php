@@ -9,7 +9,7 @@
                 <h4 class="m-0">Penilaian</h4>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item active"><a href="{{ route('dashboard') }}"> Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ route('pegawai') }}"> Daftar</a></li>
+                    <li class="breadcrumb-item active"><a href="{{ route('penilaian') }}"> Daftar</a></li>
                     <li class="breadcrumb-item active">Penilaian</li>
                 </ol>
 
