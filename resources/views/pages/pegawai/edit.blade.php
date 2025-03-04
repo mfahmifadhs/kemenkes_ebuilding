@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="col-md-12 mb-2">
                                         <label for="area" class="col-form-label">Area Kerja:</label>
-                                        <select name="area" id="area" class="form-control w-100" required>
+                                        <select name="area" id="area" class="form-control w-100">
                                             @if (!$data->area_id)
                                             <option value="">-- Pilih Area Kerja</option>
                                             @endif
