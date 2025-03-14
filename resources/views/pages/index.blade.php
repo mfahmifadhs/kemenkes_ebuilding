@@ -92,11 +92,27 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="info-box border border-dark">
-                                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-user"></i></span>
+                                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-file-signature"></i></span>
                                     <div class="info-box-content">
-                                        <span class="info-box-text">Total Penilaian Harian</span>
+                                        <span class="p-0" style="margin-top: 0%;">Total Penilaian Harian
+                                            <h6 class="text-xs">Cleaning Service</h6>
+                                        </span>
                                         <span class="info-box-number">
                                             {{ Auth::user()->pegawai->penilaianHarian->count() }} / {{ $posisi->where('posisi_id', 3)->count() ?? 0 }}
+                                            <small>pegawai</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-box border border-dark">
+                                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-file-signature"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="p-0" style="margin-top: 0%;">Total Penilaian Harian
+                                            <h6 class="text-xs">Gardener / Taman</h6>
+                                        </span>
+                                        <span class="info-box-number">
+                                            {{ $penilaianDaily->petugas->where('posisi_id', 6)->count() }} / {{ $posisi->where('posisi_id', 6)->count() ?? 0 }}
                                             <small>pegawai</small>
                                         </span>
                                     </div>

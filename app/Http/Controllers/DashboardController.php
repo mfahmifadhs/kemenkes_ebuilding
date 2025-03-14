@@ -6,23 +6,33 @@ use App\Models\Review;
 use App\Models\Pegawai;
 use App\Models\Penilaian;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $role           = Auth::user()->role_id;
         $user           = Auth::user()->pegawai;
         $pengawas       = Pegawai::where('posisi_id', 10)->get();
         $totalReview    = $this->totalReview();
         $totalReviewer  = $this->totalReviewer();
         $totalPenilaian = $this->totalPenilaian();
+        $penilaianList  = $this->penilaian();
+        $penilaianDaily = Penilaian::with('petugas')->whereDate('created_at', Carbon::today());
+
+        dd($penilaianDaily->petugas->where('posisi_id', 6)->count());
 
         $posisi    = Pegawai::get();
         $penilaian = new Penilaian();
         $totalTemuan = $penilaian->total();
 
-        return view('pages.index', compact('pengawas','posisi', 'totalTemuan', 'totalReview', 'totalReviewer', 'totalPenilaian'));
+        if ($role == 4) {
+            return view('pages.user', compact('penilaianList', 'posisi', 'totalTemuan', 'totalReview', 'totalReviewer', 'totalPenilaian'));
+        } else {
+            return view('pages.index', compact('pengawas', 'posisi', 'totalTemuan', 'totalReview', 'totalReviewer', 'totalPenilaian', 'penilaianDaily'));
+        }
     }
 
     public function totalReview()
@@ -46,7 +56,7 @@ class DashboardController extends Controller
             }
 
             if ($user->penyedia_id == 2) {
-                $posisi = [3,5];
+                $posisi = [3, 5];
                 $result = $data->whereHas('petugas', function ($query) use ($posisi) {
                     $query->whereNotIn('posisi_id', $posisi);
                 });
@@ -80,7 +90,7 @@ class DashboardController extends Controller
             }
 
             if ($user->penyedia_id == 2) {
-                $posisi = [3,5];
+                $posisi = [3, 5];
                 $result = $data->whereHas('petugas', function ($query) use ($posisi) {
                     $query->whereNotIn('posisi_id', $posisi);
                 });
@@ -103,6 +113,20 @@ class DashboardController extends Controller
         } else {
             $result = $data->get();
         }
+        return $result;
+    }
+
+    public function penilaian()
+    {
+        $user = Auth::user();
+        $data = Penilaian::orderBy('created_at', 'desc');
+
+        if ($user->role_id == 4) {
+            $result = $data->where('pengawas_id', $user->pegawai_id)->get();
+        } else {
+            $result = $data->get();
+        }
+
         return $result;
     }
 }
