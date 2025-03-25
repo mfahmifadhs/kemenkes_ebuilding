@@ -63,4 +63,19 @@ class Pegawai extends Model
             ->whereDate('created_at', Carbon::today())
             ->groupBy('petugas_id');
     }
+
+    public function totalReview()
+    {
+        return $this->hasMany(Review::class, 'petugas_id');
+    }
+
+    public function totalNilai()
+    {
+        return $this->hasMany(Penilaian::class, 'petugas_id');
+    }
+
+    public function totalTemuan()
+    {
+        return $this->hasMany(Review::class, 'petugas_id');
+    }
 }

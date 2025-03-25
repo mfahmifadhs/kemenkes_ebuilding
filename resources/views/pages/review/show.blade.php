@@ -21,91 +21,71 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 form-group">
-                <div class="card border border-dark">
-                    <div class="card-header">
-                        <label class="small m-0">
-                            <i class="fas fa-ranking-star"></i> Leaderboard Review
-                        </label>
+            @foreach ($totalReview as $row)
+            <div class="col-md-3 col-6">
+                <div class="info-box border border-dark">
+                    <span class="my-auto mx-3">
+                        <h4 class="text-info font-weight-bold mt-2">{{ $loop->iteration }}</h4>
+                    </span>
+                    <span class="info-box-icon bg-info elevation-1">
+                        @if ($row->petugas->foto_pegawai)
+                        <img src="{{ asset('dist/img/foto_pegawai/'. $row->petugas->foto_pegawai) }}" alt="Product Image" class="img-size-50">
+                        @else
+                        <img src="https://cdn-icons-png.flaticon.com/128/3177/3177465.png" alt="Product Image" class="img-size-50">
+                        @endif
+                    </span>
 
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body p-0">
-                        <ul class="products-list product-list-in-card pl-2 pr-2">
-                            @foreach ($totalReview as $row)
-                            <li class="item">
-                                <div class="product-img mx-2">
-                                    <span class="badge badge-warning">{{ $loop->iteration }}</span>
-                                    @if ($row->petugas->foto_pegawai)
-                                    <img src="{{ asset('dist/img/foto_pegawai/'. $row->petugas->foto_pegawai) }}" alt="Product Image" class="img-size-50">
-                                    @else
-                                    <img src="https://cdn-icons-png.flaticon.com/128/3177/3177465.png" alt="Product Image" class="img-size-50">
-                                    @endif
-                                </div>
-                                <div class="product-info text-sm">
-                                    <a href="{{ route('pegawai.detail', $row->petugas_id) }}" class="product-title">{{ $row->petugas->nama_pegawai }}
-                                        <h4 class="text-primary float-right font-weight-bold">
-                                            {{ $row->total }}
-                                        </h4>
-                                    </a>
-                                    <span class="product-description">
-                                        {{ $row->petugas->posisi->nama_posisi }}
-                                    </span>
-                                </div>
-                            </li>
-                            @endforeach
-                        </ul>
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+                            {{ $row->petugas->nama_pegawai }}
+                            <h6 class="text-xs">{{ $row->petugas->posisi->nama_posisi }}</h6>
+                        </span>
+                        <span class="info-box-number mt-0">
+                            <i class="fas fa-star text-warning"></i> {{ $row->total }}
+                        </span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-9 form-group">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <label class="card-title">
-                            Daftar Review
-                        </label>
+            @endforeach
+        </div>
+        <div class="card card-primary border border-dark">
+            <div class="card-header">
+                <label class="card-title">
+                    Daftar Review
+                </label>
 
-                        <div class="card-tools">
-                            <a href="" class="btn btn-default btn-sm text-dark" data-toggle="modal" data-target="#modalFilter">
-                                <i class="fas fa-filter"></i> Filter
-                            </a>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <div class="card-body">
-                            <table id="table-data" class="table table-bordered text-xs text-center">
-                                <thead class="text-uppercase text-center">
-                                    <tr>
-                                        <th style="width: 0%;">No</th>
-                                        <th style="width: 0%;" class="{{ Auth::user()->role_id != 1 ? 'd-none' : ''; }}">Aksi</th>
-                                        <th style="width: 0%;">Foto</th>
-                                        <th style="width: 10%;">Tanggal</th>
-                                        <th>Nama</th>
-                                        <th>Posisi</th>
-                                        <th>Area Kerja</th>
-                                        <th>Nilai</th>
-                                        <th>Keterangan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if ($data == 0)
-                                    <tr class="text-center">
-                                        <td colspan="13">Tidak ada data</td>
-                                    </tr>
-                                    @else
-                                    <tr>
-                                        <td colspan="13">Sedang mengambil data ...</td>
-                                    </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="card-tools">
+                    <a href="" class="btn btn-default btn-sm text-dark" data-toggle="modal" data-target="#modalFilter">
+                        <i class="fas fa-filter"></i> Filter
+                    </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <div class="card-body">
+                    <table id="table-data" class="table table-bordered text-center">
+                        <thead class="text-uppercase text-center">
+                            <tr>
+                                <th style="width: 0%;">No</th>
+                                <th style="width: 10%;" class="{{ Auth::user()->role_id != 1 ? 'd-none' : ''; }}">Aksi</th>
+                                <th style="width: 5%;">Foto</th>
+                                <th>Nama</th>
+                                <th>Posisi</th>
+                                <th>Review</th>
+                                <th>Nilai</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ($data == 0)
+                            <tr class="text-center">
+                                <td colspan="13">Tidak ada data</td>
+                            </tr>
+                            @else
+                            <tr>
+                                <td colspan="13">Sedang mengambil data ...</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -175,22 +155,22 @@
 @section('js')
 <script>
     $(document).ready(function() {
-        let bulan = $('[name="bulan"]').val();
-        let tahun = $('[name="tahun"]').val();
+        let penyedia = $('[name="penyedia"]').val();
+        let penempatan = $('[name="penempatan"]').val();
         let posisi = $('[name="posisi"]').val();
-        let petugas = $('[name="petugas"]').val();
+        let status = $('[name="status"]').val();
 
-        loadTable(bulan, tahun, posisi, petugas);
+        loadTable(penyedia, posisi, penempatan, status);
 
-        function loadTable(bulan, tahun, posisi, petugas) {
+        function loadTable(penyedia, posisi, penempatan, status) {
             $.ajax({
-                url: `{{ route('review.select') }}`,
+                url: `{{ route('pegawai.select') }}`,
                 method: 'GET',
                 data: {
-                    bulan: bulan,
-                    tahun: tahun,
+                    penyedia: penyedia,
                     posisi: posisi,
-                    petugas: petugas
+                    penempatan: penempatan,
+                    status: status
                 },
                 dataType: 'json',
                 success: function(response) {
@@ -205,27 +185,25 @@
                     `);
                     } else {
                         // Jika ada data
+                        response.sort((a, b) => Number(b.review || 0) - Number(a.review || 0));
                         $.each(response, function(index, item) {
-                            let role = '{{ Auth::user()->role_id }}';
                             let actionButton = '';
-                            let deleteUrl = "{{ route('penilaian.delete', ':id') }}".replace(':id', item.id);
+                            let deleteUrl = "{{ route('pegawai.delete', ':id') }}".replace(':id', item.id);
                             actionButton = `
-                                <a href="#" class="btn btn-default btn-xs bg-danger rounded border-dark m-1"
-                                onclick="confirmLink(event, '${deleteUrl}')">
+                                <a href="#" class="btn btn-default btn-xs bg-danger rounded border-dark"
+                                onclick="confirmRemove(event, '${deleteUrl}')">
                                     <i class="fas fa-trash-alt p-1" style="font-size: 12px;"></i>
                                 </a>
                              `;
                             tbody.append(`
                                 <tr>
-                                    <td class="align-middle">${item.no}</td>
-                                    <td class="align-middle ${role != 1 ? 'd-none' : ''}">${role == 1 ? actionButton : '' }</td>
+                                    <td class="align-middle">${index + 1}</td>
+                                    <td class="align-middle">${item.aksi}</td>
                                     <td class="align-middle">${item.foto}</td>
-                                    <td class="align-middle">${item.tanggal}</td>
-                                    <td class="align-middle text-left">${item.petugas}</td>
-                                    <td class="align-middle text-left">${item.posisi}</td>
-                                    <td class="align-middle text-left">${item.area}</td>
-                                    <td class="align-middle">${item.nilai}</td>
-                                    <td class="align-middle text-left">${item.keterangan}</td>
+                                    <td class="align-middle text-left">${item.pegawai}</td>
+                                    <td class="align-middle">${item.posisi}</td>
+                                    <td class="align-middle"><i class="fas fa-star text-warning"></i> ${item.review}</td>
+                                    <td class="align-middle"><i class="fas fa-star text-warning"></i> ${item.nilai}</td>
                                 </tr>
                             `);
                         });
@@ -242,17 +220,17 @@
                                 text: ' PDF',
                                 pageSize: 'A4',
                                 className: 'bg-danger',
-                                title: 'penilaian',
+                                title: 'kegiatan',
                                 exportOptions: {
-                                    columns: [0, 3, 5, 6, 7, 8, 9, 10],
+                                    columns: [0, 2, 3, 4],
                                 },
                             }, {
                                 extend: 'excel',
                                 text: ' Excel',
                                 className: 'bg-success',
-                                title: 'penilaian',
+                                title: 'kegiatan',
                                 exportOptions: {
-                                    columns: ':not(:nth-child(2))',
+                                    columns: [0, 2, 3, 4, 5, 6, 7, 8],
                                 },
                             }, ],
                             "bDestroy": true

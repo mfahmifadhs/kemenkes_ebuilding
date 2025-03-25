@@ -112,7 +112,7 @@
                                             <h6 class="text-xs">Gardener / Taman</h6>
                                         </span>
                                         <span class="info-box-number">
-                                            {{ $penilaianDaily->petugas->where('posisi_id', 6)->count() }} / {{ $posisi->where('posisi_id', 6)->count() ?? 0 }}
+                                            {{ $penilaianDaily->where('posisi_id', 6)->count() }} / {{ $posisi->where('posisi_id', 6)->count() ?? 0 }}
                                             <small>pegawai</small>
                                         </span>
                                     </div>

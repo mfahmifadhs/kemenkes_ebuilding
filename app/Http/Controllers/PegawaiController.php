@@ -204,7 +204,9 @@ class PegawaiController extends Controller
                 'noTelp'        => $row->no_telepon,
                 'tglMasuk'      => $row->tanggal_masuk,
                 'tglKeluar'     => $row->tanggal_keluar,
-                'status'        => $row->status
+                'status'        => $row->status,
+                'review'        => $row->totalReview->sum('nilai'),
+                'nilai'         => $row->totalNilai->sum('nilai')
             ];
 
             $no++;

@@ -43,7 +43,7 @@ class ReviewController extends Controller
         $data    = Review::count();
         $bulan   = $request->get('bulan');
         $tahun   = $request->get('tahun');
-        $posisi  = $request->get('posisi');
+        $posisi  = 3;
         $petugas = $request->get('petugas');
 
         $posisiList  = $this->posisi();
@@ -174,7 +174,7 @@ class ReviewController extends Controller
     public function totalReview()
     {
         $user = Auth::user()->pegawai;
-        $data = Review::select('petugas_id', db::raw('sum(nilai) as total'))->groupBy('petugas_id')->orderBy('total', 'desc')->take(10);
+        $data = Review::select('petugas_id', db::raw('sum(nilai) as total'))->groupBy('petugas_id')->orderBy('total', 'desc')->take(8);
 
         if ($user->penyedia) {
             if ($user->penyedia_id == 1 && $user->posisi_id == 10) {
