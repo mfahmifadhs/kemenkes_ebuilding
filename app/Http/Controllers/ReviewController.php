@@ -87,6 +87,8 @@ class ReviewController extends Controller
                     $query->whereNotIn('posisi_id', $posisiId);
                 });
             }
+        } else {
+            $data = $dataArr;
         }
 
         if ($bulan || $tahun || $posisi || $petugas) {

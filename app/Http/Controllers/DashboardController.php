@@ -22,8 +22,6 @@ class DashboardController extends Controller
         $penilaianList  = $this->penilaian();
         $penilaianDaily = Penilaian::with('petugas')->whereDate('created_at', Carbon::today());
 
-        dd($penilaianDaily->petugas->where('posisi_id', 6)->count());
-
         $posisi    = Pegawai::get();
         $penilaian = new Penilaian();
         $totalTemuan = $penilaian->total();
